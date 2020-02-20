@@ -10,10 +10,10 @@ package rmpdf
 
 import (
 	"fmt"
-	"github.com/jung-kurt/gofpdf"
-	"github.com/jung-kurt/gofpdf/contrib/gofpdi"
 	"os"
-	"github.com/rorycl/rm2pdf/rmparse"
+
+	"github.com/phpdave11/gofpdf"
+	"github.com/phpdave11/gofpdf/contrib/gofpdi"
 	"github.com/rorycl/rm2pdf/files"
 )
 
