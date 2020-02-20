@@ -37,7 +37,7 @@ var StrokeMap = map[int]string{
 	2: "pen",
 	4: "fineliner",
 	3: "marker",
-	5: "highligher",
+	5: "highlighter",
 	6: "eraser",
 	7: "sharp pencil",
 	8: "erase area",
