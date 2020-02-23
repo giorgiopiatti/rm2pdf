@@ -114,6 +114,25 @@ func checkFileExists(f string) error {
 	return nil
 }
 
+// Get rm UIDS in a folder
+
+func getRmUIDsInDir(dirname string) map[string]bool {
+
+	files, err := ioutil.ReadDir(dirname)
+
+	if err != nil {
+		panic(err)
+	}
+
+	var names = map[string]bool{}
+
+	for _, file := range files {
+		rmid := strings.Replace(filepath.Base(file.Name()), filepath.Ext(file.Name()), "", 1)
+		names[rmid] = true
+	}
+	return names
+}
+
 // RMFiler collects information from the reMarkable files associated
 // with the uuid of interest. Either a pdf at <path/uuid.pdf> is
 // expected, or a single A4 page template is to be provided instead. The
@@ -196,6 +215,8 @@ func RMFiler(inputpath string, template string, isTemplateBundle bool) (RMFileIn
 
 	rm.PageCount = len(c.Pages)
 
+	rmIDsInFbase := getRmUIDsInDir(fbase)
+
 	// extract each rm json page and construct the path to the .rm file
 	// itself
 	for i, rmj := range c.Pages {
@@ -209,6 +230,12 @@ func RMFiler(inputpath string, template string, isTemplateBundle bool) (RMFileIn
 			Identifier: rmid,
 			RelRMPath:  rmPath,
 			Exists:     true,
+		}
+
+		if !rmIDsInFbase[rmj] {
+			rmP.Exists = false
+			rm.Pages = append(rm.Pages, rmP)
+			continue
 		}
 
 		err := checkFileExists(rmJSONPath)
