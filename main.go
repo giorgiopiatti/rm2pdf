@@ -9,9 +9,10 @@ package main
 
 import (
 	"fmt"
-	flags "github.com/jessevdk/go-flags"
 	"os"
-	rmpdf "github.com/rorycl/rm2pdf/rmpdf"
+
+	rmpdf "github.com/giorgiopiatti/rm2pdf/rmpdf"
+	flags "github.com/jessevdk/go-flags"
 )
 
 const usage = `InputPath OutputFile

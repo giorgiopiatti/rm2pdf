@@ -12,9 +12,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/giorgiopiatti/rm2pdf/files"
+	"github.com/giorgiopiatti/rm2pdf/rmparse"
 	"github.com/phpdave11/gofpdf"
 	"github.com/phpdave11/gofpdf/contrib/gofpdi"
-	"github.com/rorycl/rm2pdf/files"
 )
 
 // reMarkable png templates (in /usr/share/remarkable/templates) are
