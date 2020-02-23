@@ -23,7 +23,7 @@ func ptime(ti string) time.Time {
 func TestFilesWithPDF(t *testing.T) {
 
 	template := ""
-	rmf, err := RMFiler("../testfiles/cc8313bb-5fab-4ab5-af39-46e6d4160df3.pdf", template)
+	rmf, err := RMFiler("../testfiles/cc8313bb-5fab-4ab5-af39-46e6d4160df3.pdf", template, false)
 	if err != nil {
 		t.Errorf("Could not open file %v", err)
 	}
@@ -87,7 +87,7 @@ func TestFilesWithPDF(t *testing.T) {
 func TestFilesWithoutPDF(t *testing.T) {
 
 	template := "../templates/A4.pdf"
-	rmf, err := RMFiler("../testfiles/d34df12d-e72b-4939-a791-5b34b3a810e7", template)
+	rmf, err := RMFiler("../testfiles/d34df12d-e72b-4939-a791-5b34b3a810e7", template, false)
 	if err != nil {
 		t.Errorf("Could not open file %v", err)
 	}

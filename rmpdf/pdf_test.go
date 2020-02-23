@@ -7,8 +7,10 @@ RCL January 2020
 package rmpdf
 
 import (
-	colornames "golang.org/x/image/colornames"
 	"os"
+
+	colornames "golang.org/x/image/colornames"
+
 	// "fmt"
 	"io/ioutil"
 	"testing"
@@ -26,7 +28,7 @@ func TestConvertWithPDF(t *testing.T) {
 	tname := tmpfile.Name()
 	defer os.Remove(tname)
 
-	RM2PDF("../testfiles/cc8313bb-5fab-4ab5-af39-46e6d4160df3.pdf", tname, "", false, []LocalColour{})
+	RM2PDF("../testfiles/cc8313bb-5fab-4ab5-af39-46e6d4160df3.pdf", tname, "", false, false, []LocalColour{})
 	if err != nil {
 		t.Errorf("An rm2pdf error occurred: %v", err)
 	}
@@ -52,7 +54,7 @@ func TestConvertWithoutPDF(t *testing.T) {
 		},
 	}
 
-	RM2PDF("../testfiles/d34df12d-e72b-4939-a791-5b34b3a810e7", tname, "../templates/A4.pdf", false, colours)
+	RM2PDF("../testfiles/d34df12d-e72b-4939-a791-5b34b3a810e7", tname, "../templates/A4.pdf", false, false, colours)
 	if err != nil {
 		t.Errorf("An rm2pdf error occurred: %v", err)
 	}

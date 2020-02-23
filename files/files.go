@@ -24,15 +24,16 @@ import (
 // struct defining the collected metadata about a PDF from the
 // reMarkable file collection
 type RMFileInfo struct {
-	RelPDFPath   string // full relative path to PDF
-	Identifier   string // the uuid used to identify the PDF file
-	Version      int    // version from metadata
-	VisibleName  string // visibleName from metadata (used in reMarkable interface)
-	LastModified time.Time
-	PageCount    int
-	Pages        []RMPage
-	UseTemplate  bool // a template pdf is in use
-	Debugging    bool
+	RelPDFPath        string // full relative path to PDF
+	Identifier        string // the uuid used to identify the PDF file
+	Version           int    // version from metadata
+	VisibleName       string // visibleName from metadata (used in reMarkable interface)
+	LastModified      time.Time
+	PageCount         int
+	Pages             []RMPage
+	UseTemplate       bool // a template pdf is in use
+	UseBundleTemplate bool // a template pdf with multiple pages is in use
+	Debugging         bool
 }
 
 func (r *RMFileInfo) Debug(d string) {
@@ -120,7 +121,7 @@ func checkFileExists(f string) error {
 // information from the .metadata and .content files. It then collects
 // layer information for each associated .rm file in a directory named
 // by the uuid of the pdf.
-func RMFiler(inputpath string, template string) (RMFileInfo, error) {
+func RMFiler(inputpath string, template string, isTemplateBundle bool) (RMFileInfo, error) {
 
 	rm := RMFileInfo{}
 
@@ -149,6 +150,7 @@ func RMFiler(inputpath string, template string) (RMFileInfo, error) {
 		}
 		rm.RelPDFPath = template
 		rm.UseTemplate = true
+		rm.UseBundleTemplate = isTemplateBundle
 	} else {
 		rm.RelPDFPath = fbase + ".pdf"
 	}

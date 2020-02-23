@@ -72,7 +72,7 @@ func constructPageWithLayers(rmf files.RMFileInfo, pageno int, pdf *gofpdf.Fpdf)
 
 	// if using the A4 template, recycle page use
 	var importPage int
-	if rmf.UseTemplate {
+	if rmf.UseTemplate && !rmf.UseBundleTemplate {
 		importPage = 1
 	} else {
 		importPage = pageno + 1
@@ -191,10 +191,10 @@ func constructPageWithLayers(rmf files.RMFileInfo, pageno int, pdf *gofpdf.Fpdf)
 // the associated page's .rm file on top of that, finally writing the
 // resulting pdf to outfile. Custom colours may be specified for each
 // layer.
-func RM2PDF(inputpath string, outfile string, template string, verbose bool, colours []LocalColour) error {
+func RM2PDF(inputpath string, outfile string, template string, isTemplateBundle bool, verbose bool, colours []LocalColour) error {
 
 	// initialise struct containing information about the files
-	rmfile, err := files.RMFiler(inputpath, template)
+	rmfile, err := files.RMFiler(inputpath, template, isTemplateBundle)
 	if err != nil {
 		panic(err)
 	}

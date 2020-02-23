@@ -52,10 +52,11 @@ rm2pdf [-v] [-c red] [-c green] [-c ...] `
 
 // flag options
 type Options struct {
-	Verbose  bool                `short:"v" long:"verbose"  description:"show verbose output\nthis presently does not do much"`
-	Template string              `short:"t" long:"template" description:"path to a single page A4 template to use when no UUID.pdf exists\nuseful for processing sketches without a backing PDF"`
-	Colours  []rmpdf.LocalColour `short:"c" long:"colours"  description:"colour by layer\nuse several -c flags in series to select different colours\ne.g. -c red -c blue -c green for layers 1, 2 and 3.\nSee golang.org/x/image/colornames for the colours that can be used"`
-	Args     struct {
+	Verbose        bool                `short:"v" long:"verbose"  description:"show verbose output\nthis presently does not do much"`
+	Template       string              `short:"t" long:"template" description:"path to a single page A4 template to use when no UUID.pdf exists\nuseful for processing sketches without a backing PDF"`
+	TemplateBundle bool                `short:"b" long:"template-bundle" description:"provied template has multiple pages (used for different backgounds (remark: number of pages must be equal)"`
+	Colours        []rmpdf.LocalColour `short:"c" long:"colours"  description:"colour by layer\nuse several -c flags in series to select different colours\ne.g. -c red -c blue -c green for layers 1, 2 and 3.\nSee golang.org/x/image/colornames for the colours that can be used"`
+	Args           struct {
 		InputPath  string `description:"input path and uuid, optionally ending in '.pdf'"`
 		OutputFile string `description:"output pdf file to write to"`
 	} `positional-args:"yes" required:"yes"`
@@ -72,7 +73,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	err := rmpdf.RM2PDF(options.Args.InputPath, options.Args.OutputFile, options.Template, options.Verbose, options.Colours)
+	err := rmpdf.RM2PDF(options.Args.InputPath, options.Args.OutputFile, options.Template, options.TemplateBundle, options.Verbose, options.Colours)
 	if err != nil {
 		fmt.Printf("An error occurred: %v", err)
 	}
