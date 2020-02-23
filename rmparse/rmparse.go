@@ -26,12 +26,14 @@ import (
 	"os"
 )
 
-var HEADER = "reMarkable .lines file, version=5         "
+var HEADER_V3 = "reMarkable .lines file, version=3         "
+var HEADER_V5 = "reMarkable .lines file, version=5         "
 
 // reMarkable .rm file File parser metadata: base structure
 type RMFile struct {
 	File           *os.File
 	Header         [43]byte
+	Version        uint
 	LayerNo        uint32
 	ThisLayer      uint32
 	PathNo         uint32
@@ -68,7 +70,15 @@ type Path struct {
 	Colour      uint32
 	_           uint32 // unknown
 	Width       float32
+	_           uint32 // unknown //v5
+	NumSegments uint32
+}
+
+type PathV3 struct {
+	Pen         uint32
+	Colour      uint32
 	_           uint32 // unknown
+	Width       float32
 	NumSegments uint32
 }
 
@@ -106,10 +116,16 @@ func RMParse(f *os.File) (*RMFile, error) {
 
 	rm.Header = headerLayers.Header
 	rm.LayerNo = headerLayers.Layers
-
 	// last byte is 0-terminated, chop it off
-	if string(rm.Header[:len(rm.Header)-1]) != HEADER {
-		return nil, errors.New(fmt.Sprintf("Header does not match %s", HEADER))
+	switch string(rm.Header[:len(rm.Header)-1]) {
+	case HEADER_V3:
+		rm.Version = 3
+		break
+	case HEADER_V5:
+		rm.Version = 3
+		break
+	default:
+		return nil, errors.New(fmt.Sprintf("Header does not match %s and %s", HEADER_V3, HEADER_V5))
 	}
 
 	if rm.LayerNo < 1 {
@@ -159,7 +175,7 @@ func (rm *RMFile) Parse() bool {
 	}
 
 	// get next path
-	path, err := ParsePath(rm.File)
+	path, err := ParsePath(rm.File, rm.Version)
 	if err == io.ErrUnexpectedEOF {
 		return false
 	} else if err != nil {
@@ -224,11 +240,26 @@ func ParseLayers(f *os.File) (Paths, error) {
 }
 
 // for each path in the layer.paths, return the path
-func ParsePath(f *os.File) (Path, error) {
+func ParsePath(f *os.File, version uint) (Path, error) {
 
 	path := Path{}
 
-	err := binary.Read(f, binary.LittleEndian, &path)
+	var err error
+	switch version {
+	case 3:
+		pathV3 := PathV3{}
+		err = binary.Read(f, binary.LittleEndian, &pathV3)
+		path.Pen = pathV3.Pen
+		path.Colour = pathV3.Colour
+		path.Width = pathV3.Width
+		path.NumSegments = pathV3.NumSegments
+		break
+	case 5:
+		err = binary.Read(f, binary.LittleEndian, &path)
+		break
+	default:
+	}
+
 	if err == io.ErrUnexpectedEOF {
 		return path, err
 	} else if err != nil {
