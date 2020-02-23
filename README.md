@@ -1,9 +1,11 @@
 # rm2pdf
 
-version 0.0.1-alpha
-
 Convert reMarkable tablet file 'bundles' to layered PDFs, with optional
 per-layer colours for selected pens.
+
+This project is an adapted version of https://github.com/rorycl/rm2pdf .
+I've improved some parts, added the support for both rm file version 5 and 3, mainly to
+support my other project https://github.com/giorgiopiatti/container-remarkable-sync
 
 ```
 rm2pdf -h
@@ -41,7 +43,7 @@ subsequent layers using the layer names created on the tablet. The layers can be
 turned on and off using tools provided by PDF readers such as Evince.
 
 The pen widths and opacities are estimates and could be improved. The .rm file
-pressure and tilt information is not presently used. 
+pressure and tilt information is not presently used.
 
 Colours, base width and opacity are set for each pen are set in rmpdf/stroke.go.
 Those pens with ColourOverride true will have their colour overridden by the
@@ -52,9 +54,6 @@ reliably, causing the programme to panic. Reprocessing problem PDFs with the
 `pdftk` tool seems to fix the problem.
 
 ## Background
-
-This is a holiday project to learn go. Error handling in particular is pretty
-poor.
 
 The project includes rmparse/rmparse.go, a remarkable tablet Go port of
 reMarkable tablet "lines" or ".rm" file parser, with binary decoding hints drawn
@@ -69,9 +68,9 @@ documents.
 
 Developed with go 1.13 on 64bit Linux.
 
-Test:  `go test -v ./...`
+Test: `go test -v ./...`
 
-Build : `go build`; this should produce an executable called `rm2svg`.
+Build : `go build`; this should produce an executable called `rm2pdf`.
 
 ## License
 
