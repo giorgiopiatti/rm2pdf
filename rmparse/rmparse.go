@@ -122,7 +122,7 @@ func RMParse(f *os.File) (*RMFile, error) {
 		rm.Version = 3
 		break
 	case HEADER_V5:
-		rm.Version = 3
+		rm.Version = 5
 		break
 	default:
 		return nil, errors.New(fmt.Sprintf("Header does not match %s and %s", HEADER_V3, HEADER_V5))
