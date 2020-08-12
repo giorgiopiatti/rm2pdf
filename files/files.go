@@ -240,9 +240,13 @@ func RMFiler(inputpath string, template string, isTemplateBundle bool) (RMFileIn
 
 		err := checkFileExists(rmJSONPath)
 		if err != nil {
-			rmP.Exists = false
-			rm.Pages = append(rm.Pages, rmP)
-			continue
+			rmJSONPath = filepath.Join(fbase, fmt.Sprintf("%d-metadata.json", i))
+			err := checkFileExists(rmJSONPath)
+			if err != nil {
+				rmP.Exists = false
+				rm.Pages = append(rm.Pages, rmP)
+				continue
+			}
 		}
 
 		err = checkFileExists(rmPath)
